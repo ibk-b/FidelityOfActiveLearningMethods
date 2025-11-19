@@ -146,7 +146,7 @@ aggregate_student_CALEP1_transition_network <- function(folder, Instructors, tit
 
 aggregate_student_CALEP2_transition_network <- function(Instructor) {
   
-  dat<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class1.csv"))
+  dat<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class1.csv"))
   
   dat<-dat[9:length(dat$X),c(2:8, 10:11)]
   colnames(dat) <- c("L","Ind","CG","WG","OG","AnQ_S","SQ","Prd","SP")
@@ -154,7 +154,7 @@ aggregate_student_CALEP2_transition_network <- function(Instructor) {
   dat <- dat[dat$L!="1. Students doing",]
   dat<-dat[!apply(dat == "", 1, all),]
   
-  dat2<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class2.csv"))
+  dat2<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class2.csv"))
   
   dat2<-dat2[9:length(dat2$X),c(2:8, 10:11)]
   colnames(dat2) <- c("L","Ind","CG","WG","OG","AnQ_S","SQ","Prd","SP")
@@ -162,7 +162,7 @@ aggregate_student_CALEP2_transition_network <- function(Instructor) {
   dat2 <- dat2[dat2$L!="1. Students doing",]
   dat2<-dat2[!apply(dat2 == "", 1, all),]
   
-  dat3<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class3.csv"))
+  dat3<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class3.csv"))
   
   dat3<-dat3[9:length(dat3$X),c(2:8, 10:11)]
   colnames(dat3) <- c("L","Ind","CG","WG","OG","AnQ_S","SQ","Prd","SP")
@@ -255,7 +255,7 @@ aggregate_CALEP1_transition_network <- function(folder, Instructors, title = NUL
 
 aggregate_CALEP2_transition_network <- function(Instructor) {
   
-  dat<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class1.csv"))
+  dat<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class1.csv"))
   
   dat<-dat[9:length(dat$X),c(15:21,23:24)]
   colnames(dat) <- c("Lec","RtW","FUp","PQ","CQ","AnQ_I","MG","D/V","Adm")
@@ -263,7 +263,7 @@ aggregate_CALEP2_transition_network <- function(Instructor) {
   dat <- dat[dat$L!="1. Students doing",]
   dat<-dat[!apply(dat == "", 1, all),]
   
-  dat2<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class2.csv"))
+  dat2<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class2.csv"))
   
   dat2<-dat2[9:length(dat2$X),c(15:21,23:24)]
   colnames(dat2) <- c("Lec","RtW","FUp","PQ","CQ","AnQ_I","MG","D/V","Adm")
@@ -271,7 +271,7 @@ aggregate_CALEP2_transition_network <- function(Instructor) {
   dat2 <- dat2[dat2$L!="1. Students doing",]
   dat2<-dat2[!apply(dat2 == "", 1, all),]
   
-  dat3<-read.csv(paste0("CALEP2-COPUS-observations/", trimws(Instructor),"_Class3.csv"))
+  dat3<-read.csv(paste0("ClassroomObservations/CALEP2-COPUS-observations/", trimws(Instructor),"_Class3.csv"))
   
   dat3<-dat3[9:length(dat3$X),c(15:21,23:24)]
   colnames(dat3) <- c("Lec","RtW","FUp","PQ","CQ","AnQ_I","MG","D/V","Adm")
@@ -381,12 +381,12 @@ compare_student_methods <- function() {
   for (m in methods) {
     par(mfrow = c(3, 3), mar = c(1, 1, 2, 1))
     if (m %in% c("SCALEUP", "ISLE")) {
-      g1 <- aggregate_student_CALEP1_transition_network("CALEP1-COPUS-observations", paste0("CALEP1_", m), title=m)
+      g1 <- aggregate_student_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", paste0("CALEP1_", m), title=m)
       g1 <- normalize_vertex_names(g1)
       
       freq_data[[length(freq_data)+1]] <- extract_frequencies(g1, m, "CALEP1")
       
-      raw_files <- list.files("CALEP2-COPUS-observations", pattern = paste0("^", m, "_Course[0-9]+_Class1\\.csv$"))
+      raw_files <- list.files("ClassroomObservations/CALEP2-COPUS-observations", pattern = paste0("^", m, "_Course[0-9]+_Class1\\.csv$"))
       raw_files <- trimws(raw_files)
       courses <- unique(gsub("_Class1\\.csv$", "", raw_files))
       
@@ -407,7 +407,7 @@ compare_student_methods <- function() {
       }
     } else if (m == "Tutorials-WholeClass") {
       #SPECIAL CASE: aggregated CALEP1 Class1+Class2 for CALEP2 Courses 2,3,7,9
-      g1 <- aggregate_student_CALEP1_transition_network("CALEP1-COPUS-observations", 
+      g1 <- aggregate_student_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", 
                                                         c("CALEP1_Tutorials_Class1", "CALEP1_Tutorials_Class2"), title=m)
       g1 <- normalize_vertex_names(g1)
       freq_data[[length(freq_data)+1]] <- extract_frequencies(g1, m, "CALEP1")
@@ -431,7 +431,7 @@ compare_student_methods <- function() {
       }
     } else if (m == "Tutorials-RecitationOnly") {
       #SPECIAL CASE: only CALEP1 Class2 for CALEP2 Courses 4,5,8
-      g1 <- aggregate_student_CALEP1_transition_network("CALEP1-COPUS-observations", "CALEP1_Tutorials_Class2", title=m)
+      g1 <- aggregate_student_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", "CALEP1_Tutorials_Class2", title=m)
       g1 <- normalize_vertex_names(g1)
       freq_data[[length(freq_data)+1]] <- extract_frequencies(g1, m, "CALEP1")
       
@@ -477,12 +477,12 @@ compare_methods <- function() {
   for (m in methods) {
     par(mfrow = c(3, 3), mar = c(1, 1, 2, 1))
     if (m %in% c("SCALEUP", "ISLE")) {
-      g1 <- aggregate_CALEP1_transition_network("CALEP1-COPUS-observations", paste0("CALEP1_", m), title=m)
+      g1 <- aggregate_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", paste0("CALEP1_", m), title=m)
       g1 <- normalize_vertex_names(g1)
       
       freq_data[[length(freq_data)+1]] <- extract_frequencies(g1, m, "CALEP1")
       
-      raw_files <- list.files("CALEP2-COPUS-observations", pattern = paste0("^", m, "_Course[0-9]+_Class1\\.csv$"))
+      raw_files <- list.files("ClassroomObservations/CALEP2-COPUS-observations", pattern = paste0("^", m, "_Course[0-9]+_Class1\\.csv$"))
       raw_files <- trimws(raw_files)  
       courses <- unique(gsub("_Class1\\.csv$", "", raw_files))  
       
@@ -505,7 +505,7 @@ compare_methods <- function() {
     } 
     else if (m == "Tutorials-WholeClass") {
       #SPECIAL CASE: aggregated CALEP1 Class1+Class2 for CALEP2 Courses 2,3,7,9
-      g1 <- aggregate_CALEP1_transition_network("CALEP1-COPUS-observations", 
+      g1 <- aggregate_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", 
                                                 c("CALEP1_Tutorials_Class1", "CALEP1_Tutorials_Class2"), title=m)
       g1 <- normalize_vertex_names(g1)
       
@@ -529,7 +529,7 @@ compare_methods <- function() {
       }
     } else if (m == "Tutorials-RecitationOnly") {
       #SPECIAL CASE: only CALEP1 Class2 for CALEP2 Courses 4,5,8
-      g1 <- aggregate_CALEP1_transition_network("CALEP1-COPUS-observations", "CALEP1_Tutorials_Class2", title=m)
+      g1 <- aggregate_CALEP1_transition_network("ClassroomObservations/CALEP1-COPUS-observations", "CALEP1_Tutorials_Class2", title=m)
       g1 <- normalize_vertex_names(g1)
       
       freq_data[[length(freq_data)+1]] <- extract_frequencies(g1, m, "CALEP1")
@@ -574,7 +574,6 @@ student_plot_box_with_overlay <- function(method_name) {
   calep1_sub <- filter(student_calep1_data, Method == method_name) %>% mutate(Label = method_name)
   method_label <- gsub("-", "-\n", method_name)
   ggplot() +
-    # Instructors at large (CALEP2)
     geom_boxplot(
       data = calep2_sub,
       aes(x = Code, y = Frequency, fill = "Instructors at large"),
@@ -585,7 +584,6 @@ student_plot_box_with_overlay <- function(method_name) {
       aes(x = Code, y = Frequency),
       shape = 21, size = 1.5, width = 0.2, height = 0, fill="black", color = "black"
     ) +
-    # High fidelity (CALEP1)
     geom_point(
       data = calep1_sub,
       aes(x = Code, y = Frequency, fill = "High fidelity"),
@@ -601,10 +599,8 @@ student_plot_box_with_overlay <- function(method_name) {
         return(x) }) 
     )+  
     labs(
-      #title = method_name,
-      #x = "Code", y = "Frequency", fill = NULL
-      x = NULL,  # remove "Code"
-      y = NULL,  # remove y-axis label
+      x = NULL, 
+      y = NULL, 
       fill = NULL
     ) +
     scale_fill_manual(
@@ -649,7 +645,6 @@ plot_box_with_overlay <- function(method_name) {
   bold_codes <- bold_codes_list[[method_name]]
   
   ggplot() +
-    # Instructors at large (CALEP2)
     geom_boxplot(
       data = filter(calep2_data, Method == method_name),
       aes(x = Code, y = Frequency, fill = "Instructors at large"),
@@ -660,15 +655,12 @@ plot_box_with_overlay <- function(method_name) {
       aes(x = Code, y = Frequency),
       shape = 21, size = 1.5, width = 0.2, height = 0, fill="black", color = "black"
     ) +
-    # High fidelity (CALEP1)
     geom_point(
       data = filter(calep1_data, Method == method_name),
       aes(x = Code, y = Frequency, fill = "High fidelity"),
       shape = 23, size = 2
     ) +
     labs(
-      #title = method_name,
-      #x = "Code",
       x = NULL,
       y = "Proportion of Class Time", fill = NULL
     ) +
@@ -809,7 +801,6 @@ final_plot <- plot_grid(
 )
 
 ggsave("proportion-COPUS-codes.pdf", plot = final_plot, width = 7, height = 8, units = "in")
-
 
 #Plot Duration and Transition Cosine Similarity---------------------------------
 
